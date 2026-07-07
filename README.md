@@ -1,4 +1,5 @@
 # mycflow
+
 Mycelium Flow Environment
 
 菌糸ネットワークの自己組織化からインスピレーションを得た、自律的なモジュール配置・実行環境。
@@ -7,7 +8,7 @@ Mycelium Flow Environment
 
 ## リポジトリ構成
 
-```
+```text
 mycflow/
 ├── docs/           # 設計md・ADR
 ├── wit/            # WITパッケージ定義（一次情報。wkgでOCIレジストリに公開する単位）

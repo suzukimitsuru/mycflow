@@ -51,7 +51,8 @@ jobs:
       - name: Start docker compose environment
         run: docker compose -f deploy/docker/docker-compose.yml up -d --build
       - name: Run E2E checks
-        run: echo "TODO: tests/e2e/ のスクリプト追加後にここで実行する"
+        run: |
+          echo 'TODO: tests/e2e/ のスクリプト追加後にここで実行する'
       - name: Tear down
         if: always()
         run: docker compose -f deploy/docker/docker-compose.yml down -v
