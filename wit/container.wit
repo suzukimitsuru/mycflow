@@ -1,0 +1,8 @@
+package mycflow:worlds@0.1.0;
+
+/// コンテナ層（containerd + runwasi / wasmtime）向けworld。
+/// embeddedと同一のインターフェース集合を使うが、ホスト実装（host-dataflow crate）が異なる。
+world container {
+    import mycflow:dataflow/channel@0.1.0;
+    export mycflow:node/lifecycle@0.1.0;
+}

@@ -1,0 +1,23 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/mycflow-common",
+    "crates/host-dataflow",
+    "crates/placement-manager",
+    "crates/node-agent",
+]
+# components/ はwasm32-wasip2ターゲット + cargo-componentで個別にビルドする（components/README.md参照）
+exclude = ["components/sensor-sim", "components/aggregator"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+repository = "https://github.com/suzukimitsuru/mycflow"
+
+[workspace.dependencies]
+mycflow-common = { path = "crates/mycflow-common" }
+host-dataflow = { path = "crates/host-dataflow" }
+serde = { version = "1", features = ["derive"] }
+thiserror = "1"
+anyhow = "1"

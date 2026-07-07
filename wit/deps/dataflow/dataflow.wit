@@ -1,0 +1,34 @@
+package mycflow:dataflow@0.1.0;
+
+/// mycflowのモジュール間データフローを表す共通の型定義。
+interface types {
+    /// チャネル操作に伴うエラー。
+    variant dataflow-error {
+        /// 呼び出し元にこのチャネルへのアクセス権がない（Zenoh ACL/トポロジグラフによる拒否）。
+        permission-denied(string),
+        /// 指定した論理チャネル名が解決できない。
+        channel-not-found(string),
+        /// 下位の通信層（Zenoh等）で発生したI/Oエラー。
+        io-error(string),
+    }
+}
+
+/// コンポーネント間の論理チャネルを開閉・送受信するインターフェース。
+/// 静的強制（wit world + wac合成）と動的強制（Zenoh ACL）の両方から参照される。
+interface channel {
+    use types.{dataflow-error};
+
+    /// 開かれた論理チャネルを表すリソース。
+    resource channel {
+        /// チャネルへバイト列を送信する。
+        send: func(data: list<u8>) -> result<_, dataflow-error>;
+        /// チャネルからバイト列を受信する（データがなければブロックする想定）。
+        receive: func() -> result<list<u8>, dataflow-error>;
+        /// チャネルを明示的に閉じる。
+        close: func();
+    }
+
+    /// 論理チャネル名を指定してチャネルを開く。
+    /// ホスト実装はここで許可チェック（Zenoh ACL・トポロジグラフ照合）を行う。
+    open-channel: func(name: string) -> result<channel, dataflow-error>;
+}

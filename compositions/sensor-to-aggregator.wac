@@ -1,0 +1,9 @@
+// 固定DAG: sensor-sim -> aggregator
+// TODO: sensor-sim / aggregator コンポーネントのビルド後に有効化する。
+//
+// package mycflow:sensor-to-aggregator@0.1.0;
+//
+// let sensor = new mycflow:sensor-sim { ... };
+// let aggregator = new mycflow:aggregator { ... };
+//
+// export aggregator...;

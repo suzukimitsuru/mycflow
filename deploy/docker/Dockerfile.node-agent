@@ -1,0 +1,8 @@
+FROM rust:1.82-bookworm AS build
+WORKDIR /src
+COPY . .
+RUN cargo build --release -p node-agent
+
+FROM debian:bookworm-slim
+COPY --from=build /src/target/release/node-agent /usr/local/bin/node-agent
+ENTRYPOINT ["/usr/local/bin/node-agent"]

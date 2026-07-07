@@ -1,0 +1,18 @@
+[package]
+name = "aggregator"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+publish = false
+
+[lib]
+crate-type = ["cdylib"]
+
+# cargo-component metadata（wit-bindgenの対象world）。
+# `cargo component build` 導入後に有効化する。
+# [package.metadata.component]
+# package = "mycflow:aggregator"
+#
+# [package.metadata.component.target]
+# path = "../../wit"
+# world = "container"

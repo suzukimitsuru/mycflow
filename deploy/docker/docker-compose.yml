@@ -1,0 +1,51 @@
+# 初期ターゲット: マルチ仮想マシン環境をDocker Composeで模擬する。
+#
+# - etcd: 配置メタデータ・トポロジグラフ（Layer 1）
+# - zenoh-router: モジュール間通信の中継（ACLはconfig/zenoh/から生成予定）
+# - placement-manager: 配置マネージャー本体
+# - node-a / node-b: モジュールを実行するノードエージェント（複数ノードを模擬）
+#
+# 現時点ではプロセス起動確認のためのスタブ構成。
+
+services:
+  etcd:
+    image: quay.io/coreos/etcd:v3.5.15
+    command:
+      - /usr/local/bin/etcd
+      - --name=mycflow-etcd
+      - --advertise-client-urls=http://0.0.0.0:2379
+      - --listen-client-urls=http://0.0.0.0:2379
+    ports:
+      - "2379:2379"
+
+  zenoh-router:
+    image: eclipse/zenoh:latest
+    command: ["--no-multicast-scouting"]
+    ports:
+      - "7447:7447"
+
+  placement-manager:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.placement-manager
+    depends_on:
+      - etcd
+      - zenoh-router
+
+  node-a:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.node-agent
+    environment:
+      - MYCFLOW_NODE_ID=node-a
+    depends_on:
+      - placement-manager
+
+  node-b:
+    build:
+      context: ../..
+      dockerfile: deploy/docker/Dockerfile.node-agent
+    environment:
+      - MYCFLOW_NODE_ID=node-b
+    depends_on:
+      - placement-manager

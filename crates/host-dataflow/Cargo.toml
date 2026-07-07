@@ -1,0 +1,9 @@
+[package]
+name = "host-dataflow"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+mycflow-common.workspace = true
+thiserror.workspace = true

@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  wit-validate:
+    name: WIT検証
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install wasm-tools
+        run: cargo install wasm-tools --locked
+      - name: Validate wit/ as a single workspace
+        run: wasm-tools component wit wit/
+
+  cargo-test:
+    name: cargo test
+    runs-on: ubuntu-latest
+    needs: wit-validate
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo test --workspace
+
+  component-build:
+    name: コンポーネントビルド
+    runs-on: ubuntu-latest
+    needs: cargo-test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-wasip2
+      - name: Install cargo-component
+        run: cargo install cargo-component --locked
+      # components/ はホスト側ワークスペースに含めない（ターゲット・ツールチェーンが異なる）ため個別にビルドする
+      - name: Build reference components
+        run: |
+          (cd components/sensor-sim && cargo component build --release --target wasm32-wasip2)
+          (cd components/aggregator && cargo component build --release --target wasm32-wasip2)
+
+  compose-e2e:
+    name: compose E2E
+    runs-on: ubuntu-latest
+    needs: component-build
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start docker compose environment
+        run: docker compose -f deploy/docker/docker-compose.yml up -d --build
+      - name: Run E2E checks
+        run: echo "TODO: tests/e2e/ のスクリプト追加後にここで実行する"
+      - name: Tear down
+        if: always()
+        run: docker compose -f deploy/docker/docker-compose.yml down -v

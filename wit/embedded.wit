@@ -1,0 +1,9 @@
+package mycflow:worlds@0.1.0;
+
+/// 組み込みデバイス層（WAMR / Zephyr・ESP-IDF）向けworld。
+/// モジュールはchannelインターフェースをimportして通信し、
+/// lifecycleインターフェースをexportしてホスト（WAMR薄層）へ状態を報告する。
+world embedded {
+    import mycflow:dataflow/channel@0.1.0;
+    export mycflow:node/lifecycle@0.1.0;
+}

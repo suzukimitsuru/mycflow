@@ -1,0 +1,32 @@
+package mycflow:node@0.1.0;
+
+/// ノードのリソース状況・ライフサイクル状態を表す型定義。
+interface types {
+    /// CPU/メモリ使用状況。配置マネージャーの配置判断材料になる。
+    record resource-usage {
+        cpu-percent: f32,
+        memory-bytes: u64,
+    }
+
+    /// モジュールのライフサイクル状態。
+    enum lifecycle-state {
+        starting,
+        running,
+        stopping,
+        stopped,
+        failed,
+    }
+}
+
+/// モジュールが自身のリソース状況・状態を環境側（配置マネージャー）へ報告するインターフェース。
+/// 判断ロジックは持たず、報告のみを行う（配置判断は配置マネージャーの責務）。
+interface lifecycle {
+    use types.{resource-usage, lifecycle-state};
+
+    /// 現在のリソース使用状況を報告する。
+    report-usage: func() -> resource-usage;
+    /// 現在のライフサイクル状態を報告する。
+    report-state: func() -> lifecycle-state;
+    /// 配置マネージャーからの指示によりシャットダウンする。
+    shutdown: func();
+}

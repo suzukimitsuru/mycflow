@@ -1,0 +1,10 @@
+{
+  "$comment": "固定DAG『sensor-to-aggregator』のトポロジグラフ定義。配置マネージャーがetcdへ投入し、Zenoh ACL生成の入力とする。プレースホルダのため実際のモジュールIDは未確定。",
+  "channels": [
+    {
+      "channel": "sensor.raw",
+      "from_module": "mycflow:sensor-sim",
+      "to_module": "mycflow:aggregator"
+    }
+  ]
+}

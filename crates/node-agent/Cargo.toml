@@ -1,0 +1,13 @@
+[package]
+name = "node-agent"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+mycflow-common.workspace = true
+anyhow.workspace = true
+
+[[bin]]
+name = "node-agent"
+path = "src/main.rs"

@@ -1,0 +1,26 @@
+// Zenoh ACL雛形。配置マネージャーが `{{from_module}}` `{{to_module}}` `{{channel}}` を
+// トポロジグラフ（compositions/*.topology.json / etcd）の値で置換して生成する。
+{
+  rules: [
+    {
+      id: "{{channel}}",
+      permission: "allow",
+      flows: ["egress"],
+      messages: ["put", "declare_subscriber"],
+      key_exprs: ["mycflow/{{channel}}/**"],
+      subjects: [
+        { id: "{{from_module}}" },
+      ],
+    },
+    {
+      id: "{{channel}}-recv",
+      permission: "allow",
+      flows: ["ingress"],
+      messages: ["put", "declare_subscriber"],
+      key_exprs: ["mycflow/{{channel}}/**"],
+      subjects: [
+        { id: "{{to_module}}" },
+      ],
+    },
+  ],
+}

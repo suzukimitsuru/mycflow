@@ -1,0 +1,9 @@
+# wkg（wasm-pkg-tools）の名前空間マッピング設定。
+# `namespace:package@version` 形式の参照を実際のOCIレジストリへ解決する。
+#
+# 例:
+# [namespace-registries]
+# mycflow = "localhost:5000"
+#
+# 初期Docker環境ではローカルレジストリ（deploy/docker/docker-compose.yml内のregistryサービス）を指す想定。
+# 詳細が固まり次第、実際のマッピングを追加する。
